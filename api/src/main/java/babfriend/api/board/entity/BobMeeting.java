@@ -24,7 +24,7 @@ public class FoodJoin {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User joinUser;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_id")
