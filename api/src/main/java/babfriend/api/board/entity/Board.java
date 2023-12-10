@@ -2,6 +2,7 @@ package babfriend.api.board.entity;
 
 
 import babfriend.api.board.type.CategoryType;
+import babfriend.api.common.BaseEntity;
 import babfriend.api.user.entity.User;
 import babfriend.api.user.type.GenderType;
 import jakarta.persistence.*;
@@ -20,18 +21,18 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Board {
+public class Board extends BaseEntity {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "board_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "babManger_id")
+    @JoinColumn(name = "bab_manger_id")
     private User babManager;
 
-    @OneToMany(mappedBy = "joinUser")
-    private List<FoodJoin> joinUsers = new ArrayList<>();
+    @OneToMany(mappedBy = "board")
+    private List<BobMeeting> bobMeetings = new ArrayList<>();
 
     @Enumerated(STRING)
     private CategoryType categoryType;

@@ -1,6 +1,7 @@
 package babfriend.api.board.entity;
 
 
+import babfriend.api.common.BaseEntity;
 import babfriend.api.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,10 +17,10 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class FoodJoin {
+public class BobMeeting extends BaseEntity {
 
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "food_join_id")
+    @Column(name = "bob_meeting_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)

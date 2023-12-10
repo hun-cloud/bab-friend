@@ -1,5 +1,6 @@
 package babfriend.api.user.entity;
 
+import babfriend.api.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,14 +12,14 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class MannerEvaluation {
+public class MannerEvaluation extends BaseEntity {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "manner_evaluation_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "babManager_id")
+    @JoinColumn(name = "bab_manager_id")
     private User babManager;
 
     @ManyToOne(fetch = LAZY)

@@ -6,11 +6,35 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
+    open-in-view: false # 영속성 컨텍스트 생명주기
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
+    show-sql: true
     properties:
-      hibernate:
-        format_sql: true
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+  security:
+    oauth2:
+      client:
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+        registration:
+          kakao:
+            client-id: 049e57913a91b56754510b7734524584
+            client-secret: NdNDvPHiPsynS1u47au7SMo5I785ewtm
+#            scope:
+#              - profile_nickname
+#              - account_email
+#              - profile_image
+            client-authentication-method: client_secret_post
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            client-name: kakao
 
 logging.level:
   org.hibernate.SQL: debug
