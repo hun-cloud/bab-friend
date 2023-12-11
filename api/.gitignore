@@ -38,3 +38,4 @@ out/
 
 ### querydsl
 /src/main/generated
+*.yml
