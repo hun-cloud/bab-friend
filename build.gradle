@@ -27,3 +27,11 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task copyPrivate(type: Copy) {
+	copy {
+		from './bab-friend-submodule'
+		include "*.yml"
+		into '/api/src/main/resources'
+	}
+}

@@ -1,0 +1,3 @@
+[submodule "bab-friend-submodule"]
+	path = bab-friend-submodule
+	url = https://github.com/hun-cloud/bab-friend-submodule.git
