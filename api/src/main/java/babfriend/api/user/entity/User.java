@@ -28,6 +28,8 @@ public class User extends BaseEntity {
 
     private String oauthId;
 
+    private String email;
+
     private String name;
 
     private int temperature;
@@ -50,8 +52,9 @@ public class User extends BaseEntity {
     private List<Notification> notifications = new ArrayList<>();
 
     @Builder
-    public User(String oauthId, String name, int temperature, BBTI bbti, GenderType genderType, int age) {
+    private User(String oauthId, String email, String name, int temperature, BBTI bbti, GenderType genderType, int age) {
         this.oauthId = oauthId;
+        this.email = email;
         this.name = name;
         this.temperature = temperature;
         this.bbti = bbti;

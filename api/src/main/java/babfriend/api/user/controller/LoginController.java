@@ -10,8 +10,6 @@ public class LoginController {
 
     @GetMapping
     public String login() {
-        System.out.println("여기 탐");
         return "login";
     }
-
 }

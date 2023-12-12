@@ -31,6 +31,7 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final OAuth2UserService oAuth2UserService;
+    private final MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,35 +53,36 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("api");
+                .requestMatchers("/login").permitAll() // Allow unauthenticated access to /login
+                .anyRequest().authenticated();
 
         // httpSecurity.authorizeHttpRequests(config -> config.anyRequest().permitAll());
 
         httpSecurity.oauth2Login(oauth2Configurer -> oauth2Configurer
                 .loginPage("/login")
-                .successHandler(successHandler())
+                .successHandler(myAuthenticationSuccessHandler)
                 .userInfoEndpoint()
                 .userService(oAuth2UserService));
 
         return httpSecurity.build();
     }
 
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-        return (((request, response, authentication) -> {
-            DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
-
-            String id = defaultOAuth2User.getAttributes().get("id").toString();
-            String body = """
-                    {"id":"%s"}
-                      """.formatted(id);
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-            PrintWriter writer = response.getWriter();
-            writer.println(body);
-            writer.flush();
-        }));
-    }
+//    @Bean
+//    public AuthenticationSuccessHandler successHandler() {
+//        return (((request, response, authentication) -> {
+//            DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
+//
+//            String id = defaultOAuth2User.getAttributes().get("id").toString();
+//            String body = """
+//                    {"id":"%s"}
+//                      """.formatted(id);
+//            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+//
+//            PrintWriter writer = response.getWriter();
+//            writer.println(body);
+//            writer.flush();
+//        }));
+//    }
 
 }

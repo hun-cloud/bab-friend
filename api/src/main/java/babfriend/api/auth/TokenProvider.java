@@ -29,14 +29,10 @@ public class TokenProvider implements InitializingBean { // 추가 라이브러�
 
     private static final String AUTHORITIES_KEY = "auth";
     private final String secret;
-    private final Long tokenValidityInMilliseconds;
     private Key key;
 
-    public TokenProvider(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds) {
+    public TokenProvider(@Value("${jwt.secret}") String secret) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
     }
 
     @Override
