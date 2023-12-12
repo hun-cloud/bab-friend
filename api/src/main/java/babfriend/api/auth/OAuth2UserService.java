@@ -36,7 +36,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
 
-        log.info("userNameAttributeName = {}", userNameAttributeName);
+       //  log.info("userNameAttributeName = {}", userNameAttributeName);
         // DB 저장 로직 추가
 
         return new DefaultOAuth2User(authorities, oAuth2User.getAttributes(), userNameAttributeName);

@@ -24,8 +24,8 @@ public class ResponseDto<T> {
                 .build();
     }
 
-    public static <T> ResponseDto success(T body) {
-        return ResponseDto.builder()
+    public static <T> ResponseDto<T> success(T body) {
+        return ResponseDto.<T>builder()
                 .statusCode(StatusCode.OK)
                 .data(body)
                 .build();
