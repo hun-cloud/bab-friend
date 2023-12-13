@@ -16,20 +16,19 @@ public class OAuth2Attribute {
     private String name; // 이름 정보
     private String picture; // 프로필 사진 정보
     private String provider; // 제공자 정보
+    private String oAuthId; // oAuthId
+    private Integer birthYear; // 태어난 년도
+    private String gender; // 성별
 
     // 서비스에 따라 OAuth2Attribute 객체를 생성하는 메서드
     static OAuth2Attribute of(String provider, String attributeKey,
                               Map<String, Object> attributes) {
-        switch (provider) {
-            case "google":
-                return ofGoogle(provider, attributeKey, attributes);
-            case "kakao":
-                return ofKakao(provider,"email", attributes);
-            case "naver":
-                return ofNaver(provider, "id", attributes);
-            default:
-                throw new RuntimeException();
-        }
+        return switch (provider) {
+            case "google" -> ofGoogle(provider, attributeKey, attributes);
+            case "kakao" -> ofKakao(provider, "email", attributes);
+            case "naver" -> ofNaver(provider, "id", attributes);
+            default -> throw new RuntimeException();
+        };
     }
 
     /*
@@ -56,7 +55,12 @@ public class OAuth2Attribute {
         Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
 
         return OAuth2Attribute.builder()
+                .oAuthId(attributes.get("id").toString())
                 .email((String) kakaoAccount.get("email"))
+                .name((String) kakaoAccount.get("name"))
+                .birthYear(Integer.valueOf((String) kakaoAccount.get("birthyear")))
+                .gender((String) kakaoAccount.get("gender"))
+                .picture((String) kakaoProfile.get("profile_image_url"))
                 .provider(provider)
                 .attributes(kakaoAccount)
                 .attributeKey(attributeKey)
@@ -82,12 +86,43 @@ public class OAuth2Attribute {
 
     // OAuth2User 객체에 넣어주기 위해서 Map으로 값들을 반환해준다.
     Map<String, Object> convertToMap() {
+        return switch (provider) {
+            case "google" -> convertToGoogleMap();
+            case "kakao" -> convertToKakaoMap();
+            case "naver" -> convertToNaverMap();
+            default -> throw new RuntimeException();
+        };
+
+    }
+
+    private Map<String, Object> convertToKakaoMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", oAuthId);
+        map.put("email", email);
+        map.put("name", name);
+        map.put("gender", gender);
+        map.put("birthYear", birthYear);
+        map.put("picture", picture);
+        map.put("key", attributeKey); // email
+        map.put("provider", provider); // kakao
+        return map;
+    }
+
+    private Map<String, Object> convertToNaverMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", attributeKey);
         map.put("key", attributeKey);
         map.put("email", email);
         map.put("provider", provider);
+        return map;
+    }
 
+    private Map<String, Object> convertToGoogleMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", attributeKey);
+        map.put("key", attributeKey);
+        map.put("email", email);
+        map.put("provider", provider);
         return map;
     }
 }

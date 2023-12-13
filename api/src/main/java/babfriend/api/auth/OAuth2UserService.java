@@ -36,6 +36,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
+        oAuth2User.getAttributes().forEach((k, v) -> System.out.println("key : " + k +", value : " + v));
 
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
