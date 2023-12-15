@@ -46,15 +46,18 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
-
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
                 .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/login").permitAll() // Allow unauthenticated access to /login
-                .anyRequest().authenticated();
+                .authorizeHttpRequests(authorizeHttpRequests ->
+                        authorizeHttpRequests.requestMatchers("/login", "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**", "swagger-ui.html").permitAll()
+                                );// .anyRequest().authenticated()
+
+//                        .excludePathPatterns("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**")
+//                .excludePathPatterns("/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs", "/api-docs/**")
+//                .excludePathPatterns("/signUp", "/signIn", "/error/**", "/reissue")
+//                .addPathPatterns("/**");
 
         // httpSecurity.authorizeHttpRequests(config -> config.anyRequest().permitAll());
 

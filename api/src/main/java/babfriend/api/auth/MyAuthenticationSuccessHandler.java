@@ -47,10 +47,8 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
 
             String redirectUrl = (String) request.getSession().getAttribute("prevPage");
 
-            UriComponentsBuilder.fromUriString("/index")
-                            .
-
-            getRedirectStrategy().sendRedirect();
+//            UriComponentsBuilder.fromUriString("/index")
+//            getRedirectStrategy().sendRedirect();
 
         }
 
