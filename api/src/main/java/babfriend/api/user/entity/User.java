@@ -40,7 +40,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private GenderType genderType;
 
-    private int age;
+    private int birthYear;
+
+    private String profileImageUrl;
 
     @OneToMany(mappedBy = "user")
     private List<BoardComment> boardComments = new ArrayList<>();
@@ -52,13 +54,11 @@ public class User extends BaseEntity {
     private List<Notification> notifications = new ArrayList<>();
 
     @Builder
-    private User(String oauthId, String email, String name, int temperature, BBTI bbti, GenderType genderType, int age) {
-        this.oauthId = oauthId;
+    private User(String email, String name, GenderType genderType, int birthYear, String profileImageUrl) {
         this.email = email;
         this.name = name;
-        this.temperature = temperature;
-        this.bbti = bbti;
         this.genderType = genderType;
-        this.age = age;
+        this.birthYear = birthYear;
+        this.profileImageUrl = profileImageUrl;
     }
 }

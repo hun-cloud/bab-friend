@@ -1,5 +1,7 @@
 package babfriend.api.auth;
 
+import babfriend.api.user.dto.UserDto;
+import babfriend.api.user.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -17,6 +18,8 @@ import java.io.IOException;
 public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
+    private final UserService userService;
+    private static final String redirectUrl = "http://localhost:3000/";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -30,7 +33,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
         String email = oAuth2User.getAttribute("email");
         // 플랫폼
         String provider = oAuth2User.getAttribute("provider");
-
+        // 회원 가입 여부 : true : 회원 , false : 비회원
         boolean isExist = oAuth2User.getAttribute("exist");
 
         String role = oAuth2User.getAuthorities().stream()
@@ -40,19 +43,18 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
 
         oAuth2User.getAttributes().forEach((k, v) -> System.out.println("k : " + k + " v :" + v));
 
-        // 회원 존재
-        if (isExist) {
-            String accessToken = tokenProvider.createAccessToken(authentication);
-            String refreshToken = tokenProvider.createRefreshToken(authentication);
-
-            String redirectUrl = (String) request.getSession().getAttribute("prevPage");
-
-//            UriComponentsBuilder.fromUriString("/index")
-//            getRedirectStrategy().sendRedirect();
-
+        // 회원이 아닐 시 회원가입
+        if (!isExist) {
+            UserDto userDto = UserDto.of(oAuth2User);
+            userService.join(userDto);
         }
 
+        // 회원 존재
+        String accessToken = tokenProvider.createAccessToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
 
-
+        response.addHeader("Authorization", "Bearer " + accessToken);
+        response.addHeader("Refresh-Token", refreshToken);
+        response.sendRedirect(redirectUrl);
     }
 }

@@ -1,6 +1,7 @@
 package babfriend.api.auth;
 
 import babfriend.api.user.entity.User;
+import babfriend.api.user.repository.UserRepository;
 import babfriend.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -38,13 +39,15 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 .getUserNameAttributeName();
         oAuth2User.getAttributes().forEach((k, v) -> System.out.println("key : " + k +", value : " + v));
 
+        // 플랫폼에 따른 OAuth2Attribute 객체 생성
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
+        // 객체를 map으로 변환
         Map<String, Object> memberAttribute = oAuth2Attribute.convertToMap();
 
         String email = (String) memberAttribute.get("email");
 
-        Optional<User> findUser = userService.findByEmail(email);
+        Optional<User> findUser = userRepository.findByEmail(email);
 
         if (findUser.isEmpty()) {
             memberAttribute.put("exist", false);
@@ -53,7 +56,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                     memberAttribute, "email");
         }
 
-        memberAttribute.put("exist", false);
+        memberAttribute.put("exist", true);
         log.info("registrationId : {}", registrationId); // kakao
         log.info("userNameAttributeName = {}", userNameAttributeName); // id
 
