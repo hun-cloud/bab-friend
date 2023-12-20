@@ -23,4 +23,12 @@ public class LoginRestController {
                 .responseMessage("123123")
                 .build();
     }
+
+    @GetMapping("/authTest")
+    public ResponseDto test2(){
+        return ResponseDto.builder()
+                .statusCode(StatusCode.OK)
+                .responseMessage("123123")
+                .build();
+    }
 }

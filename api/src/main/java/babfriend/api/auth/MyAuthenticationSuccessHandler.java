@@ -26,7 +26,6 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        // super.onAuthenticationSuccess(request, response, authentication);
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
         // 이메일
@@ -54,7 +53,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         response.addHeader("Authorization", "Bearer " + accessToken);
-        response.addHeader("Refresh-Token", refreshToken);
+        response.addHeader("Refresh", refreshToken);
         response.sendRedirect(redirectUrl);
     }
 }

@@ -3,35 +3,46 @@ package babfriend.api.auth;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class TokenProvider implements InitializingBean { // 추가 라이브러리르 사용해서 JWT를 생성하고 검증하는 컴포넌트
 
+    private final RedisTemplate<String, String> redisTemplate;
+
     private static final Long accessTokenValidTime = Duration.ofMinutes(30).toMillis();
     private static final Long refreshTokenValidTime = Duration.ofDays(7).toMillis();
 
+    private static final String BEARER_TYPE = "Bearer";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String REFRESH_HEADER = "Refresh";
+    private static final String BEARER_PREFIX = "Bearer ";
     private static final String AUTHORITIES_KEY = "auth";
     private final String secret;
     private Key key;
 
-    public TokenProvider(@Value("${jwt.secret}") String secret) {
+    public TokenProvider(RedisTemplate<String, String> redisTemplate, @Value("${jwt.secret}") String secret) {
+        this.redisTemplate = redisTemplate;
         this.secret = secret;
     }
 
@@ -43,12 +54,28 @@ public class TokenProvider implements InitializingBean { // 추가 라이브러�
 
     // 액세스 토큰 생성
     public String createAccessToken(Authentication authentication) {
-        return createToken(authentication, "access", accessTokenValidTime);
+        String accessToken = createToken(authentication, "access", accessTokenValidTime);
+        log.info("accessToken");
+        log.info(accessToken);
+        return accessToken;
     }
 
     // 리프레쉬 토큰 생성
     public String createRefreshToken(Authentication authentication) {
-        return createToken(authentication, "refresh", refreshTokenValidTime);
+        String refreshToken = createToken(authentication, "refresh", refreshTokenValidTime);
+
+        // redis에 저장
+        redisTemplate.opsForValue().set(
+                authentication.getName(),
+                refreshToken,
+                refreshTokenValidTime,
+                TimeUnit.MILLISECONDS
+        );
+
+        log.info("refreshToken");
+        log.info(refreshToken);
+
+        return refreshToken;
     }
 
     // 토큰 생성
@@ -84,6 +111,15 @@ public class TokenProvider implements InitializingBean { // 추가 라이브러�
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+    // token 복호화
+    public Claims parseClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
     // 토큰의 유효성 검증을 수행
     public boolean validateToken(String token) {
         try {
@@ -105,5 +141,19 @@ public class TokenProvider implements InitializingBean { // 추가 라이브러�
         return false;
     }
 
+    public String resolveRefreshToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(REFRESH_HEADER);
+        if (StringUtils.hasText(bearerToken)) {
+            return bearerToken;
+        }
+        return null;
+    }
 
+    public String resolveAccessToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
 }
