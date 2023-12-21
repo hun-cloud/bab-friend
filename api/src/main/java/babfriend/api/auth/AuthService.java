@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @Service
 @Transactional
@@ -32,14 +34,16 @@ public class AuthService {
 
     public void addBlackList(String accessToken) {
         redisTemplate.opsForValue()
-                .set(accessToken, "logout");
+                .set(accessToken, "logout", 30, TimeUnit.MINUTES);
     }
 
-    public void logoutCheck(String accessToken) {
+    public boolean logoutCheck(String accessToken) {
+
         String result = redisTemplate.opsForValue().get(accessToken);
 
         if (StringUtils.hasText(result) && result.equals("logout")) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized access");
+            return false;
         }
+        return true;
     }
 }
