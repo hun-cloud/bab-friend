@@ -1,5 +1,6 @@
 package babfriend.api.auth;
 
+import babfriend.api.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -47,29 +47,33 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         {
                             authorizeHttpRequests.requestMatchers(
-                                            "/login",
+                                            "/login/**",
                                             "/swagger-resources/**",
                                             "/swagger-ui/**",
-                                            "/v3/api-docs",
+                                            "/v3/api-docs/**",
                                             "/api-docs/**",
+                                            "/oauth2/**",
+                                            "/favicon.ico",
+                                            "/doc.html",
+                                            "/error",
                                             "swagger-ui.html").permitAll()
                                     .anyRequest().authenticated();
                         }
                 )
                 .apply(new JwtSecurityConfig(tokenProvider, authService));
 
-        httpSecurity.oauth2Login(oauth2Configurer -> oauth2Configurer
-                .loginPage("/login")
-                .successHandler(myAuthenticationSuccessHandler)
-                .userInfoEndpoint()
-                .userService(oAuth2UserService))
-                .logout(logout ->
-                        logout.logoutUrl("/logout")
-                                .addLogoutHandler(logoutHandler)
-                                .logoutSuccessHandler((request, response, authentication) -> {
-                                            SecurityContextHolder.clearContext();
-                                            response.sendRedirect("http://localhost:3000");
-                                        }));
+//        httpSecurity.oauth2Login(oauth2Configurer -> oauth2Configurer
+//                .loginPage("/login")
+//                .successHandler(myAuthenticationSuccessHandler)
+//                .userInfoEndpoint()
+//                .userService(oAuth2UserService))
+//                .logout(logout ->
+//                        logout.logoutUrl("/logout")
+//                                .addLogoutHandler(logoutHandler)
+//                                .logoutSuccessHandler((request, response, authentication) -> {
+//                                            SecurityContextHolder.clearContext();
+//                                            response.sendRedirect("http://localhost:3000");
+//                                        }));
 
         return httpSecurity.build();
     }

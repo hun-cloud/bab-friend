@@ -1,6 +1,6 @@
 package babfriend.api.auth;
 
-import babfriend.api.user.service.UserService;
+import babfriend.api.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

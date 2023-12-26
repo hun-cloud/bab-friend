@@ -16,7 +16,12 @@ public class UserService {
 
     // 회원가입
     public void join(UserDto userDto) {
-        User user = userDto.toEntity();
-        userRepository.save(user);
+
+        Optional<User> userOpt = userRepository.findByEmail(userDto.getEmail());
+
+        if (userOpt.isEmpty()) {
+            User user = userDto.toEntity();
+            userRepository.save(user);
+        }
     }
 }

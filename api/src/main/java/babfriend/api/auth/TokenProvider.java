@@ -1,5 +1,6 @@
 package babfriend.api.auth;
 
+import babfriend.api.user.dto.UserDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -93,6 +94,18 @@ public class TokenProvider implements InitializingBean { // 추가 라이브러�
                 .compact();
     }
 
+    private String createToken(UserDto userDto, String type, Long tokenValidTime) {
+        String authorities = "ROLE_USER";  // Assuming a default role for simplicity
+
+        return Jwts.builder()
+                .setSubject(userDto.getEmail())  // Assuming email as the unique identifier
+                .claim(AUTHORITIES_KEY, authorities)  // Information storage
+                .signWith(key, SignatureAlgorithm.HS512)  // Algorithm and secret for the signature
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenValidTime))
+                .compact();
+    }
+
     // 토큰으로 클레임 만들고, 유저 객체를 만들어서 authentication 객체를 리턴
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts
@@ -155,5 +168,23 @@ public class TokenProvider implements InitializingBean { // 추가 라이브러�
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    public String createAccessToken(UserDto userDto) {
+        return createToken(userDto, "access", accessTokenValidTime);
+    }
+
+    public String createRefreshToken(UserDto userDto) {
+        String refreshToken = createToken(userDto, "refresh", refreshTokenValidTime);
+
+        // redis에 저장
+        redisTemplate.opsForValue().set(
+                userDto.getEmail(),  // Assuming email is a unique identifier
+                refreshToken,
+                refreshTokenValidTime,
+                TimeUnit.MILLISECONDS
+        );
+
+        return refreshToken;
     }
 }
