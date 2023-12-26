@@ -32,6 +32,8 @@ public class User extends BaseEntity {
 
     private String name;
 
+    private String nickName;
+
     private int temperature;
 
     @Enumerated(EnumType.STRING)
@@ -54,9 +56,10 @@ public class User extends BaseEntity {
     private List<Notification> notifications = new ArrayList<>();
 
     @Builder
-    private User(String email, String name, GenderType genderType, int birthYear, String profileImageUrl) {
+    private User(String email, String name, String nickName, GenderType genderType, int birthYear, String profileImageUrl) {
         this.email = email;
         this.name = name;
+        this.nickName = nickName;
         this.genderType = genderType;
         this.birthYear = birthYear;
         this.profileImageUrl = profileImageUrl;

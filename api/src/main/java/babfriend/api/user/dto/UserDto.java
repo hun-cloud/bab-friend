@@ -41,6 +41,7 @@ public class UserDto {
         System.out.println("profile = " + profile);
         String profileImageUrl = (String) profile.get("profile_image_url");
         System.out.println(profileImageUrl);
+
         return UserDto.builder()
                 .name((String) kakaoUserInfo.get("name"))
                 .email((String) kakaoUserInfo.get("email"))
@@ -50,10 +51,11 @@ public class UserDto {
                 .build();
     }
 
-    public User toEntity() {
+    public User toEntity(String nickname) {
         return User.builder()
                 .name(name)
                 .email(email)
+                .nickName(nickname)
                 .genderType(genderType)
                 .birthYear(birthYear)
                 .profileImageUrl(profileImageUrl)

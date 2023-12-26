@@ -52,12 +52,13 @@ public class AuthService {
                 .set(accessToken, "logout");
     }
 
-    public void logoutCheck(String accessToken) {
+    public boolean logoutCheck(String accessToken) {
         String result = redisTemplate.opsForValue().get(accessToken);
 
         if (StringUtils.hasText(result) && result.equals("logout")) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized access");
+            return false;
         }
+        return true;
     }
 
     public KakaoLoginResponseDto getKakaoToken(String code) {

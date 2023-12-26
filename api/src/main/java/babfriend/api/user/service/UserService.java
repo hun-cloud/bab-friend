@@ -1,5 +1,6 @@
 package babfriend.api.user.service;
 
+import babfriend.api.common.service.RandomNicknameService;
 import babfriend.api.user.dto.UserDto;
 import babfriend.api.user.entity.User;
 import babfriend.api.user.repository.UserRepository;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RandomNicknameService randomNicknameService;
 
     // 회원가입
     public void join(UserDto userDto) {
@@ -20,7 +22,9 @@ public class UserService {
         Optional<User> userOpt = userRepository.findByEmail(userDto.getEmail());
 
         if (userOpt.isEmpty()) {
-            User user = userDto.toEntity();
+            String nickname = randomNicknameService.createRandomNickname();
+            User user = userDto.toEntity(nickname);
+
             userRepository.save(user);
         }
     }
