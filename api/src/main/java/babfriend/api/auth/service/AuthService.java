@@ -41,7 +41,7 @@ public class AuthService {
 
     private static final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
     private static final String KAKAO_REST_API_KEY = "049e57913a91b56754510b7734524584";
-    private static final String REDIRECT_URL = "http://localhost:8080/login/oauth2/code/kakao";
+    private static final String REDIRECT_URL = "http://localhost:3000/kakao/callback";
     private static final String KAKAO_INFO_URL = "https://kapi.kakao.com/v2/user/me";
     private static final String KAKAO_CLIENT_SECRET = "NdNDvPHiPsynS1u47au7SMo5I785ewtm";
 
