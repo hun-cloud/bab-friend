@@ -51,6 +51,16 @@ public class UserDto {
                 .build();
     }
 
+    public static UserDto of(User user) {
+        return UserDto.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .genderType(user.getGenderType())
+                .birthYear(user.getBirthYear())
+                .profileImageUrl(user.getProfileImageUrl())
+                .build();
+    }
+
     public User toEntity(String nickname) {
         return User.builder()
                 .name(name)

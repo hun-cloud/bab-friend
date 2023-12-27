@@ -45,9 +45,9 @@ public class Board extends BaseEntity {
     private String linkUrl;
 
     private LocalDateTime eatTime;
-    private int joinLimit;
+    private Integer joinLimit;
     private boolean fix;
-    private int priceRange;
+    private Integer priceRange;
     private boolean alcohol;
     private boolean ageGroupLimit;
 }

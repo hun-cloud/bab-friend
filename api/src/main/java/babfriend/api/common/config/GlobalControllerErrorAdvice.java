@@ -2,6 +2,7 @@ package babfriend.api.common.config;
 
 import babfriend.api.common.ResponseDto;
 import babfriend.api.common.StatusCode;
+import babfriend.api.common.exception.CustomException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,6 +11,14 @@ import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 public class GlobalControllerErrorAdvice {
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseDto CustomException(CustomException e) {
+        return ResponseDto.builder()
+                .statusCode(e.getErrorCode().getStatus())
+                .responseMessage(e.getMessage())
+                .build();
+    }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseDto accessDeniedException(AccessDeniedException e) {

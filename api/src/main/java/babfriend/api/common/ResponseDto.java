@@ -1,5 +1,6 @@
 package babfriend.api.common;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.FastByteArrayOutputStream;
@@ -7,8 +8,10 @@ import org.springframework.util.FastByteArrayOutputStream;
 @Getter
 public class ResponseDto<T> {
 
+    @Schema(description = "상태코드")
     private final int statusCode;
     private final String responseMessage;
+    @Schema(description = "데이터")
     private final T data;
 
     @Builder

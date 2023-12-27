@@ -34,7 +34,7 @@ public class User extends BaseEntity {
 
     private String nickName;
 
-    private int temperature;
+    private Integer temperature;
 
     @Enumerated(EnumType.STRING)
     private BBTI bbti;
@@ -42,7 +42,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private GenderType genderType;
 
-    private int birthYear;
+    private Integer birthYear;
 
     private String profileImageUrl;
 

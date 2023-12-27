@@ -4,8 +4,16 @@ import babfriend.api.auth.TokenProvider;
 import babfriend.api.auth.dto.KakaoLoginResponseDto;
 import babfriend.api.auth.dto.KakaoUserInfoDto;
 import babfriend.api.auth.dto.TokenDto;
+import babfriend.api.common.exception.ErrorCode;
+import babfriend.api.common.exception.RedisValueNotFoundException;
+import babfriend.api.common.exception.TokenIsNotSameException;
+import babfriend.api.redis.RedisService;
 import babfriend.api.user.dto.UserDto;
+import babfriend.api.user.entity.User;
+import babfriend.api.user.repository.UserRepository;
+import babfriend.api.user.service.UserService;
 import io.jsonwebtoken.Claims;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,7 +36,8 @@ import java.util.Map;
 public class AuthService {
 
     private final TokenProvider tokenProvider;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisService redisService;
+    private final UserRepository userRepository;
 
     private static final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
     private static final String KAKAO_REST_API_KEY = "049e57913a91b56754510b7734524584";
@@ -39,21 +48,22 @@ public class AuthService {
     public void logout(String refreshToken, String accessToken) {
         Claims claims = tokenProvider.parseClaims(refreshToken);
         String email = claims.getSubject();
-        String redisRefreshToken = redisTemplate.opsForValue().get(email);
+
+        String redisRefreshToken = redisService.getValue(email).orElseThrow(
+                () -> new EntityNotFoundException(String.format("레디스에서 %s value를 찾을 수 없습니다.", email)));
 
         if (refreshToken.equals(redisRefreshToken)) {
-            redisTemplate.delete(email);
+            redisService.delete(email);
             log.info("refresh 삭제 완료");
         }
     }
 
     public void addBlackList(String accessToken) {
-        redisTemplate.opsForValue()
-                .set(accessToken, "logout");
+        redisService.setValue(accessToken, "logout");
     }
 
     public boolean logoutCheck(String accessToken) {
-        String result = redisTemplate.opsForValue().get(accessToken);
+        String result = redisService.getValue(accessToken).orElse("");
 
         if (StringUtils.hasText(result) && result.equals("logout")) {
             return false;
@@ -107,6 +117,29 @@ public class AuthService {
     public TokenDto createToken(UserDto userDto) {
         String accessToken = tokenProvider.createAccessToken(userDto);
         String refreshToken = tokenProvider.createRefreshToken(userDto);
-        return new TokenDto(accessToken, refreshToken);
+
+        return TokenDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public String reissueAccessToken(TokenDto tokenDto) {
+        Claims claims = tokenProvider.parseClaims(tokenDto.getRefreshToken());
+        String email = claims.getSubject();
+
+        String redisRefreshToken = redisService.getValue(email)
+                .orElseThrow(() -> new RedisValueNotFoundException());
+
+        if (!redisRefreshToken.equals(tokenDto.getRefreshToken())) {
+            throw new TokenIsNotSameException();
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException());
+
+        UserDto userDto = UserDto.of(user);
+
+        return tokenProvider.createAccessToken(userDto);
     }
 }

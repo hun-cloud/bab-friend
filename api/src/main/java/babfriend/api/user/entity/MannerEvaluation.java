@@ -26,5 +26,5 @@ public class MannerEvaluation extends BaseEntity {
     @JoinColumn(name = "evaluator_id")
     private User evaluator;
 
-    private int score;
+    private Integer score;
 }

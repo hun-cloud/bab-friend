@@ -53,6 +53,7 @@ public class SecurityConfig {
                                             "/v3/api-docs/**",
                                             "/api-docs/**",
                                             "/oauth2/**",
+                                            "/auth/**",
                                             "/favicon.ico",
                                             "/doc.html",
                                             "/error",
