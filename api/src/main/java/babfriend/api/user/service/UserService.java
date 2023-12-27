@@ -1,5 +1,6 @@
 package babfriend.api.user.service;
 
+import babfriend.api.common.ResponseDto;
 import babfriend.api.common.service.RandomNicknameService;
 import babfriend.api.user.dto.UserDto;
 import babfriend.api.user.entity.User;
@@ -27,5 +28,9 @@ public class UserService {
 
             userRepository.save(user);
         }
+    }
+
+    public UserDto userInfo(String id) {
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package babfriend.api.user.controller;
 
 import babfriend.api.common.ResponseDto;
+import babfriend.api.user.dto.UserDto;
 import babfriend.api.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-//    private final UserService userService;
-//
+    private final UserService userService;
+
 //    @GetMapping("/{id}/info")
 //    public ResponseDto<?> userInfo(@PathVariable("id") String id) {
-//
+//        UserDto userDto = userService.userInfo(id);
+//        return ResponseDto.success().s
 //    }
 }
