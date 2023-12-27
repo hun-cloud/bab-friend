@@ -4,10 +4,12 @@ import babfriend.api.user.entity.User;
 import babfriend.api.user.type.GenderType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Map;
 
+@Slf4j
 @Getter
 public class UserDto {
     private String email;
@@ -39,6 +41,7 @@ public class UserDto {
         kakaoUserInfo = (Map<String, Object>) kakaoUserInfo.get("kakao_account");
 
         String profileImageUrl = null;
+        log.info("profile" + kakaoUserInfo.get("profile"));
         if (kakaoUserInfo.get("profile") != null) {
             Map<String, Object> profile = (Map) kakaoUserInfo.get("profile");
             profileImageUrl = (String) profile.get("profile_image_url");

@@ -19,11 +19,9 @@ class UserRepositoryTest {
     @Test
     void userSave() {
         User user = User.builder()
-                .oauthId("aaa@naver.com")
+                .email("aaa@naver.com")
                 .name("aaa")
-                .age(20)
                 .genderType(GenderType.FEMALE)
-                .temperature(36)
                 .build();
         userRepository.save(user);
     }

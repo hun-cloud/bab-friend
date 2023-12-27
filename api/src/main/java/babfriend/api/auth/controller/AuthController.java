@@ -28,9 +28,9 @@ public class AuthController {
     public ResponseDto<TokenDto> kakaoCallback(@RequestParam("code") String code) {
         System.out.println(code);
         KakaoLoginResponseDto kakaoLoginResponseDto = authService.getKakaoToken(code);
-
+        log.info("getUserInfo start");
         UserDto userDto = authService.getUserInfo(kakaoLoginResponseDto);
-
+        log.info("getUserInfo finish");
         userService.join(userDto);
 
         TokenDto tokenDto = authService.createToken(userDto);
