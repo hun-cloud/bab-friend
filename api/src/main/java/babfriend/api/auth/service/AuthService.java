@@ -124,7 +124,7 @@ public class AuthService {
                 .build();
     }
 
-    public String reissueAccessToken(TokenDto tokenDto) {
+    public TokenDto reissueAccessToken(TokenDto tokenDto) {
         Claims claims = tokenProvider.parseClaims(tokenDto.getRefreshToken());
         String email = claims.getSubject();
 
@@ -139,7 +139,10 @@ public class AuthService {
                 .orElseThrow(() -> new EntityNotFoundException());
 
         UserDto userDto = UserDto.of(user);
+        String newAccessToken = tokenProvider.createAccessToken(userDto);
 
-        return tokenProvider.createAccessToken(userDto);
+        return TokenDto.builder()
+                .accessToken(newAccessToken)
+                .build();
     }
 }

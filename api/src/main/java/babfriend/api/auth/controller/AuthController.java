@@ -25,7 +25,7 @@ public class AuthController {
 
     @Operation(summary = "토큰 발급 API")
     @GetMapping("/login/oauth2/code/kakao")
-    public ResponseDto<?> kakaoCallback(@RequestParam("code") String code) {
+    public ResponseDto<TokenDto> kakaoCallback(@RequestParam("code") String code) {
 
         KakaoLoginResponseDto kakaoLoginResponseDto = authService.getKakaoToken(code);
 
@@ -40,8 +40,8 @@ public class AuthController {
 
     @Operation(summary = "액세스 토큰 재발급 API")
     @PatchMapping("/auth/reissue")
-    public ResponseDto<?> reissue(@RequestBody TokenDto tokenDto) {
-        String result = authService.reissueAccessToken(tokenDto);
+    public ResponseDto<TokenDto> reissue(@RequestBody TokenDto tokenDto) {
+        TokenDto result = authService.reissueAccessToken(tokenDto);
 
         return ResponseDto.success(result);
     }
