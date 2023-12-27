@@ -14,14 +14,16 @@ import java.util.Map;
 public class UserDto {
     private String email;
     private String name;
+    private String nickName;
     private GenderType genderType;
     private int birthYear;
     private String profileImageUrl;
 
     @Builder
-    private UserDto(String email, String name, GenderType genderType, int birthYear, String profileImageUrl) {
+    private UserDto(String email, String name, String nickName, GenderType genderType, int birthYear, String profileImageUrl) {
         this.email = email;
         this.name = name;
+        this.nickName = nickName;
         this.genderType = genderType;
         this.birthYear = birthYear;
         this.profileImageUrl = profileImageUrl;
@@ -41,7 +43,7 @@ public class UserDto {
         kakaoUserInfo = (Map<String, Object>) kakaoUserInfo.get("kakao_account");
 
         String profileImageUrl = null;
-        log.info("profile" + kakaoUserInfo.get("profile"));
+        log.info("profile " + kakaoUserInfo.get("profile"));
         if (kakaoUserInfo.get("profile") != null) {
             Map<String, Object> profile = (Map) kakaoUserInfo.get("profile");
             profileImageUrl = (String) profile.get("profile_image_url");
@@ -59,6 +61,7 @@ public class UserDto {
     public static UserDto of(User user) {
         return UserDto.builder()
                 .name(user.getName())
+                .nickName(user.getNickName())
                 .email(user.getEmail())
                 .genderType(user.getGenderType())
                 .birthYear(user.getBirthYear())
