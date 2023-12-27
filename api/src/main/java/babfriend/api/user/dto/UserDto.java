@@ -37,10 +37,12 @@ public class UserDto {
 
     public static UserDto of(Map<String, Object> kakaoUserInfo) {
         kakaoUserInfo = (Map<String, Object>) kakaoUserInfo.get("kakao_account");
-        Map<String, Object> profile = (Map) kakaoUserInfo.get("profile");
-        System.out.println("profile = " + profile);
-        String profileImageUrl = (String) profile.get("profile_image_url");
-        System.out.println(profileImageUrl);
+
+        String profileImageUrl = null;
+        if (kakaoUserInfo.get("profile") != null) {
+            Map<String, Object> profile = (Map) kakaoUserInfo.get("profile");
+            profileImageUrl = (String) profile.get("profile_image_url");
+        }
 
         return UserDto.builder()
                 .name((String) kakaoUserInfo.get("name"))
