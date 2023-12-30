@@ -51,6 +51,7 @@ public class SecurityConfig {
                                             "/swagger-resources/**",
                                             "/swagger-ui/**",
                                             "/v3/api-docs/**",
+                                            "/kakao/**",
                                             "/api-docs/**",
                                             "/oauth2/**",
                                             "/auth/**",

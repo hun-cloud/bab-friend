@@ -24,7 +24,7 @@ public class AuthController {
     private final UserService userService;
 
     @Operation(summary = "토큰 발급 API")
-    @GetMapping("/login/oauth2/code/kakao")
+    @GetMapping("/kakao/callback")
     public ResponseDto<TokenDto> kakaoCallback(@RequestParam("code") String code) {
         System.out.println(code);
         KakaoLoginResponseDto kakaoLoginResponseDto = authService.getKakaoToken(code);

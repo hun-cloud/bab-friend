@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,5 +64,10 @@ public class User extends BaseEntity {
         this.genderType = genderType;
         this.birthYear = birthYear;
         this.profileImageUrl = profileImageUrl;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.temperature = this.temperature == null ? 34 : this.temperature;
     }
 }

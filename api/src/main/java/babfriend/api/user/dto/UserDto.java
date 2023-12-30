@@ -15,15 +15,17 @@ public class UserDto {
     private String email;
     private String name;
     private String nickName;
+    private int temperature;
     private GenderType genderType;
     private int birthYear;
     private String profileImageUrl;
 
     @Builder
-    private UserDto(String email, String name, String nickName, GenderType genderType, int birthYear, String profileImageUrl) {
+    private UserDto(String email, String name, String nickName, int temperature, GenderType genderType, int birthYear, String profileImageUrl) {
         this.email = email;
         this.name = name;
         this.nickName = nickName;
+        this.temperature = temperature;
         this.genderType = genderType;
         this.birthYear = birthYear;
         this.profileImageUrl = profileImageUrl;
@@ -65,6 +67,7 @@ public class UserDto {
                 .email(user.getEmail())
                 .genderType(user.getGenderType())
                 .birthYear(user.getBirthYear())
+                .temperature(user.getTemperature())
                 .profileImageUrl(user.getProfileImageUrl())
                 .build();
     }

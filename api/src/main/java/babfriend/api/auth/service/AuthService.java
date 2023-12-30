@@ -16,6 +16,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -32,18 +33,24 @@ import java.util.Map;
 @Slf4j
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class AuthService {
 
     private final TokenProvider tokenProvider;
     private final RedisService redisService;
     private final UserRepository userRepository;
+    private final String KAKAO_CLIENT_SECRET;
+
+    public AuthService(TokenProvider tokenProvider, RedisService redisService, UserRepository userRepository, @Value("${kakao.secret}") String KAKAO_CLIENT_SECRET) {
+        this.tokenProvider = tokenProvider;
+        this.redisService = redisService;
+        this.userRepository = userRepository;
+        this.KAKAO_CLIENT_SECRET = KAKAO_CLIENT_SECRET;
+    }
 
     private static final String KAKAO_TOKEN_URL = "https://kauth.kakao.com/oauth/token";
     private static final String KAKAO_REST_API_KEY = "049e57913a91b56754510b7734524584";
     private static final String REDIRECT_URL = "http://localhost:3000/kakao/callback";
     private static final String KAKAO_INFO_URL = "https://kapi.kakao.com/v2/user/me";
-    private static final String KAKAO_CLIENT_SECRET = "NdNDvPHiPsynS1u47au7SMo5I785ewtm";
 
     public void logout(String refreshToken, String accessToken) {
         Claims claims = tokenProvider.parseClaims(refreshToken);
