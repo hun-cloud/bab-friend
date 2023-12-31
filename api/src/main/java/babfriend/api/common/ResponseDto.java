@@ -10,6 +10,7 @@ public class ResponseDto<T> {
 
     @Schema(description = "상태코드")
     private final int statusCode;
+    @Schema(description = "응답 메시지")
     private final String responseMessage;
     @Schema(description = "데이터")
     private final T data;
@@ -23,6 +24,7 @@ public class ResponseDto<T> {
 
     public static ResponseDto success() {
         return ResponseDto.builder()
+                .responseMessage("success")
                 .statusCode(StatusCode.OK)
                 .build();
     }

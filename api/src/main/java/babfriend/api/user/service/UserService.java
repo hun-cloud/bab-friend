@@ -47,6 +47,13 @@ public class UserService {
         return UserDto.of(user);
     }
 
+    public User findUser(HttpServletRequest request) {
+        String email = getEmail(request);
+        User findUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException());
+        return findUser;
+    }
+
     public UserDetailDto userDetailInfo(HttpServletRequest request) {
         String email = getEmail(request);
 

@@ -8,6 +8,18 @@
 <a href="/oauth2/authorization/kakao">카카오 로그인</a>
 <a href="https://kauth.kakao.com/oauth/authorize?client_id=049e57913a91b56754510b7734524584&redirect_uri=http://localhost:3000/kakao/callback&response_type=code
 ">카카오 로그인2</a>
+<h1>지도</h1>
+<div id="map" style="width:500px;height:400px;"></div>
 
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2a599d8fd1bfb66b71d8adc309d3086b&libraries=services,clusterer,drawing"></script>
+<script>
+		var container = document.getElementById('map');
+		var options = {
+			center: new kakao.maps.LatLng(33.450701, 126.570667),
+			level: 3
+		};
+
+		var map = new kakao.maps.Map(container, options);
+	</script>
 </body>
 </html>

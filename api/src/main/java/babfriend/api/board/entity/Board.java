@@ -6,6 +6,7 @@ import babfriend.api.common.BaseEntity;
 import babfriend.api.user.entity.User;
 import babfriend.api.user.type.GenderType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -50,4 +51,20 @@ public class Board extends BaseEntity {
     private Integer priceRange;
     private boolean alcohol;
     private boolean ageGroupLimit;
+
+    @Builder
+    private Board(User babManager, CategoryType categoryType, GenderType genderType, String title, String content, String linkUrl, LocalDateTime eatTime, Integer joinLimit, boolean fix, Integer priceRange, boolean alcohol, boolean ageGroupLimit) {
+        this.babManager = babManager;
+        this.categoryType = categoryType;
+        this.genderType = genderType;
+        this.title = title;
+        this.content = content;
+        this.linkUrl = linkUrl;
+        this.eatTime = eatTime;
+        this.joinLimit = joinLimit;
+        this.fix = fix;
+        this.priceRange = priceRange;
+        this.alcohol = alcohol;
+        this.ageGroupLimit = ageGroupLimit;
+    }
 }
