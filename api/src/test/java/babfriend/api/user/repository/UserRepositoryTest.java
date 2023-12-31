@@ -25,4 +25,10 @@ class UserRepositoryTest {
                 .build();
         userRepository.save(user);
     }
+
+
+    @Test
+    void findUserDetail() {
+        userRepository.findUserDetailByEmail("jhl9838@naver.com");
+    }
 }

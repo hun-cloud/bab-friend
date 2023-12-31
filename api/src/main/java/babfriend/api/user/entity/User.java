@@ -4,6 +4,7 @@ import babfriend.api.board.entity.Board;
 import babfriend.api.board.entity.BoardComment;
 import babfriend.api.common.BaseEntity;
 import babfriend.api.notification.entity.Notification;
+import babfriend.api.review.entity.EatReview;
 import babfriend.api.user.type.BBTI;
 import babfriend.api.user.type.GenderType;
 import jakarta.persistence.*;
@@ -55,6 +56,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Notification> notifications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "reviewee")
+    private List<EatReview> receivedReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "reviewer")
+    private List<EatReview> sendReviews = new ArrayList<>();
 
     @Builder
     private User(String email, String name, String nickName, GenderType genderType, int birthYear, String profileImageUrl) {
