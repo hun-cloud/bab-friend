@@ -26,6 +26,7 @@ public class UserService {
     private final TokenProvider tokenProvider;
 
     // 회원가입
+    @Transactional
     public void join(UserDto userDto) {
 
         Optional<User> userOpt = userRepository.findByEmail(userDto.getEmail());
