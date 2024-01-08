@@ -37,8 +37,9 @@ public class UserController {
 
     @Operation(summary = "유저 정보 업데이트 API")
     @PatchMapping("/info")
-    public ResponseDto<?> updateUserInfo(HttpServletRequest request, @RequestBody UserUpdateDto userUpdateDto) {
-        UserDto userDto = userService.userInfo(request);
+    public ResponseDto updateUserInfo(HttpServletRequest request, @ModelAttribute UserUpdateDto userUpdateDto) {
+
+        userService.updateInfo(request, userUpdateDto);
 
         return ResponseDto.success();
     }

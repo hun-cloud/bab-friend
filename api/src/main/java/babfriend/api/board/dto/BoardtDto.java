@@ -2,7 +2,6 @@ package babfriend.api.board.dto;
 
 import babfriend.api.board.entity.Board;
 import babfriend.api.board.type.CategoryType;
-import babfriend.api.user.dto.UserDto;
 import babfriend.api.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,19 +19,21 @@ public class BoardtDto {
     private LocalDateTime eatTime;
     private int joinLimit;
     private boolean fix;
+    private String location;
     private int priceRange;
     private boolean alcohol;
     private boolean ageGroupLimit;
     private CategoryType categoryType;
 
     @Builder
-    private BoardtDto(String title, String content, String linkUrl, LocalDateTime eatTime, int joinLimit, boolean fix, int priceRange, boolean alcohol, boolean ageGroupLimit, CategoryType categoryType) {
+    private BoardtDto(String title, String content, String linkUrl, LocalDateTime eatTime, int joinLimit, boolean fix, String location, int priceRange, boolean alcohol, boolean ageGroupLimit, CategoryType categoryType) {
         this.title = title;
         this.content = content;
         this.linkUrl = linkUrl;
         this.eatTime = eatTime;
         this.joinLimit = joinLimit;
         this.fix = fix;
+        this.location = location;
         this.priceRange = priceRange;
         this.alcohol = alcohol;
         this.ageGroupLimit = ageGroupLimit;
@@ -48,6 +49,7 @@ public class BoardtDto {
                 .linkUrl(linkUrl)
                 .eatTime(eatTime)
                 .joinLimit(joinLimit)
+                .location(location)
                 .fix(fix)
                 .priceRange(priceRange)
                 .alcohol(alcohol)

@@ -2,9 +2,11 @@ package babfriend.api.user.service;
 
 import babfriend.api.auth.TokenProvider;
 import babfriend.api.common.ResponseDto;
+import babfriend.api.common.service.FileUtils;
 import babfriend.api.common.service.RandomNicknameService;
 import babfriend.api.user.dto.UserDetailDto;
 import babfriend.api.user.dto.UserDto;
+import babfriend.api.user.dto.UserUpdateDto;
 import babfriend.api.user.entity.User;
 import babfriend.api.user.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -24,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final RandomNicknameService randomNicknameService;
     private final TokenProvider tokenProvider;
+    private final FileUtils fileUtils;
 
     // 회원가입
     @Transactional
@@ -62,6 +65,19 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException());
 
         return UserDetailDto.of(user);
+    }
+
+    // 회원정보 업데이트
+    @Transactional
+    public void updateInfo(HttpServletRequest request, UserUpdateDto userUpdateDto) {
+        String email = getEmail(request);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException());
+
+        String path = fileUtils.updateImage(userUpdateDto);
+
+        user.updateUserInfo(userUpdateDto.getNickName(), path);
     }
 
     private String getEmail(HttpServletRequest request) {

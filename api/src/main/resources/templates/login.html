@@ -10,7 +10,24 @@
 ">카카오 로그인2</a>
 <h1>지도</h1>
 <div id="map" style="width:500px;height:400px;"></div>
+<div id="imageContainer"></div>
 
+<form id="uploadForm" method="PATCH" enctype="multipart/form-data" action="/users/info">
+    <table>
+        <tr>
+            <td>File to upload:</td>
+            <td><input type="file" name="profileImage" /></td>
+        </tr>
+        <tr>
+            <td><input name="nickName"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Upload" /></td>
+        </tr>
+    </table>
+</form>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2a599d8fd1bfb66b71d8adc309d3086b&libraries=services,clusterer,drawing"></script>
 <script>
 		var container = document.getElementById('map');
@@ -21,5 +38,80 @@
 
 		var map = new kakao.maps.Map(container, options);
 	</script>
+<script>
+$(document).ready(function() {
+async function fetchData() {
+    console.log('page load...');
+
+    fetch('/users/info', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaGw5ODM4QG5hdmVyLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJpYXQiOjE3MDQ2MjMzNzIsImV4cCI6MTcwNDYyNTE3Mn0.EiTcIATLVLgELzkU7vM5MC4970JT2ZRSJ1Yu4GVxCnHye4KTc8DX_BRClT_N1qE9s157O5GDfcP24U3ik0Nx5w'
+        },
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('print');
+            const data = await response.json();
+
+            console.log(data);
+            console.log('출력 완료');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return response.json(); // or response.text() depending on your server's response
+    })
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+}
+fetchData();
+});
+
+
+</script>
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Get the file and name from the form
+        const file = document.querySelector('input[type="file"]').files[0];
+        const name = document.querySelector('input[name="nickName"]').value;
+
+        // Get the token from wherever it's stored (e.g., localStorage)
+        const token = 'your_token_value';
+
+        // Create a FormData object to handle file and text data
+        const formData = new FormData();
+        formData.append('profileImage', file);
+        formData.append('nickName', name);
+        console.log('test');
+        // Make the AJAX request with fetch
+        fetch('/users/info', {
+            method: 'PATCH',
+            headers: {
+                'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaGw5ODM4QG5hdmVyLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJpYXQiOjE3MDQ2MjA1ODcsImV4cCI6MTcwNDYyMjM4N30.EHPhMCTtcCukF-HEiChnn6V2mjflZVruar6J5TQrgEeI5hi9njqMNC3no8sGNDa4m-OZD7ZYZtJh29NkyXUGjA'
+            },
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // or response.text() depending on your server's response
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
 </body>
 </html>

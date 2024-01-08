@@ -24,7 +24,7 @@ public class BoardController {
     private final BoardService boardService;
     private final UserService userService;
 
-    @Operation(summary = "게시글 리스트 API")
+    @Operation(summary = "게시글 리스트 API - 미완성")
     @GetMapping
     public List<BoardsSimpleDto> boards() {
 

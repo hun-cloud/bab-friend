@@ -5,6 +5,7 @@ import babfriend.api.board.entity.BoardComment;
 import babfriend.api.common.BaseEntity;
 import babfriend.api.notification.entity.Notification;
 import babfriend.api.review.entity.EatReview;
+import babfriend.api.user.dto.UserUpdateDto;
 import babfriend.api.user.type.BBTI;
 import babfriend.api.user.type.GenderType;
 import jakarta.persistence.*;
@@ -71,6 +72,14 @@ public class User extends BaseEntity {
         this.genderType = genderType;
         this.birthYear = birthYear;
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public void updateUserInfo(String nickName, String path) {
+        this.nickName = nickName;
+
+        if (path != null) {
+            this.profileImageUrl = path;
+        }
     }
 
     @PrePersist
