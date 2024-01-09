@@ -3,6 +3,7 @@ package babfriend.api.board.dto;
 import babfriend.api.board.entity.Board;
 import babfriend.api.board.type.CategoryType;
 import babfriend.api.user.entity.User;
+import babfriend.api.user.type.GenderType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,9 +25,10 @@ public class BoardtDto {
     private boolean alcohol;
     private boolean ageGroupLimit;
     private CategoryType categoryType;
+    private GenderType genderType;
 
     @Builder
-    private BoardtDto(String title, String content, String linkUrl, LocalDateTime eatTime, int joinLimit, boolean fix, String location, int priceRange, boolean alcohol, boolean ageGroupLimit, CategoryType categoryType) {
+    private BoardtDto(String title, String content, String linkUrl, LocalDateTime eatTime, int joinLimit, boolean fix, String location, int priceRange, boolean alcohol, boolean ageGroupLimit, CategoryType categoryType, GenderType genderType) {
         this.title = title;
         this.content = content;
         this.linkUrl = linkUrl;
@@ -38,6 +40,7 @@ public class BoardtDto {
         this.alcohol = alcohol;
         this.ageGroupLimit = ageGroupLimit;
         this.categoryType = categoryType;
+        this.genderType = genderType;
     }
 
     public Board toEntity(User user) {
@@ -51,6 +54,7 @@ public class BoardtDto {
                 .joinLimit(joinLimit)
                 .location(location)
                 .fix(fix)
+                .genderType(genderType)
                 .priceRange(priceRange)
                 .alcohol(alcohol)
                 .ageGroupLimit(ageGroupLimit)
