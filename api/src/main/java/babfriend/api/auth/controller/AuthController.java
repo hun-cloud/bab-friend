@@ -29,7 +29,13 @@ public class AuthController {
         System.out.println(code);
         KakaoLoginResponseDto kakaoLoginResponseDto = authService.getKakaoToken(code);
         log.info("getUserInfo start");
-        UserDto userDto = authService.getUserInfo(kakaoLoginResponseDto);
+        UserDto userDto = null;
+        try {
+            userDto = authService.getUserInfo(kakaoLoginResponseDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         log.info("getUserInfo finish");
         userService.join(userDto);
 

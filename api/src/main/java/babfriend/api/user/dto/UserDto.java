@@ -33,7 +33,7 @@ public class UserDto {
         this.genderType = genderType;
         this.birthYear = birthYear;
         this.profileImageUrl = profileImageUrl;
-        this.profileImage = profileImage.getByteArray();
+        this.profileImage = profileImage != null ? profileImage.getByteArray() : null;
     }
 
     public static UserDto of(OAuth2User oAuth2User) {

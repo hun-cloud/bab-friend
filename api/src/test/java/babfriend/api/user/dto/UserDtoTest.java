@@ -14,8 +14,11 @@ class UserDtoTest {
         Object map = null;
 
         Map map1 = (Map) map;
+    }
 
-
+    @Test
+    void byteTest() {
+        byte[] test = null;
     }
 
 }
