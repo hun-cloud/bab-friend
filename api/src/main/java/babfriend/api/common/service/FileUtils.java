@@ -20,7 +20,7 @@ import java.util.UUID;
 @Service
 public class FileUtils {
 
-    private static final String PROFILE_PICTURE_PATH = "C:\\test\\";
+    private static final String PROFILE_PICTURE_PATH = "/home/uploadedImage/";
 
     // 이미지 업데이트
     public String updateImage(UserUpdateDto userUpdateDto) {
@@ -31,10 +31,11 @@ public class FileUtils {
             String originalFileName = profileImage.getOriginalFilename();
             String originalFIleExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
             String storedFileName = UUID.randomUUID() + originalFIleExtension;
-            File file = new File(PROFILE_PICTURE_PATH + storedFileName);
+            // File file = new File(PROFILE_PICTURE_PATH + storedFileName);
+            Path path = Paths.get(PROFILE_PICTURE_PATH + storedFileName).toAbsolutePath();
 
             try {
-                profileImage.transferTo(file);
+                profileImage.transferTo(path);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
