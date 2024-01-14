@@ -54,7 +54,7 @@ public class SecurityConfig {
                                             "/v3/api-docs/**",
                                             "/kakao/**",
                                             "/api-docs/**",
-                                            "/imagePath/**",
+                                            "/image/**",
                                             "/oauth2/**",
                                             "/auth/**",
                                             "/favicon.ico",

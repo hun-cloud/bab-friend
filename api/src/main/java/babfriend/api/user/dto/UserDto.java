@@ -15,6 +15,7 @@ import java.util.Map;
 @Slf4j
 @Getter
 public class UserDto {
+    private final String profileDefaultImageUrl = "";
     private String email;
     private String name;
     private String nickName;
@@ -61,7 +62,7 @@ public class UserDto {
                 .email((String) kakaoUserInfo.get("email"))
                 .genderType("male".equals(kakaoUserInfo.get("gender")) ? GenderType.MALE : GenderType.FEMALE)
                 .birthYear(Integer.valueOf((String) kakaoUserInfo.get("birthyear")))
-                .profileImageUrl(profileImageUrl)
+                .profileImageUrl(profileImageUrl == null ? "default_profile.jpg" : profileImageUrl)
                 .build();
     }
 

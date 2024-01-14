@@ -6,9 +6,12 @@ import babfriend.api.user.dto.UserDto;
 import babfriend.api.user.dto.UserUpdateDto;
 import babfriend.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "사용자 정보 API", description = "사용자 관련 API")
@@ -36,8 +39,8 @@ public class UserController {
     }
 
     @Operation(summary = "유저 정보 업데이트 API")
-    @PatchMapping("/info")
-    public ResponseDto updateUserInfo(HttpServletRequest request, @ModelAttribute UserUpdateDto userUpdateDto) {
+    @PatchMapping(value = "/info", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseDto updateUserInfo(HttpServletRequest request, @ParameterObject @ModelAttribute UserUpdateDto userUpdateDto) {
 
         userService.updateInfo(request, userUpdateDto);
 

@@ -25,7 +25,7 @@ public class FileUtils {
     // 이미지 업데이트
     public String updateImage(UserUpdateDto userUpdateDto) {
 
-        MultipartFile profileImage = userUpdateDto.getProfileImage();
+        MultipartFile profileImage = userUpdateDto.getProfileImageUrl();
 
         if(!profileImage.isEmpty()) {
             String originalFileName = profileImage.getOriginalFilename();

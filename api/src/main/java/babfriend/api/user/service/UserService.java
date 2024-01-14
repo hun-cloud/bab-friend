@@ -36,6 +36,7 @@ public class UserService {
 
         if (userOpt.isEmpty()) {
             String nickname = randomNicknameService.createRandomNickname();
+
             User user = userDto.toEntity(nickname);
 
             userRepository.save(user);

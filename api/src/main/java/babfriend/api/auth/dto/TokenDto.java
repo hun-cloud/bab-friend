@@ -6,14 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+
 @Getter
 @NoArgsConstructor
 public class TokenDto {
+
     @Schema(description = "액세스 토큰", nullable = false)
     private String accessToken;
     @Schema(description = "리프레시 토큰", nullable = false)
     private String refreshToken;
-
 
     @Builder
     private TokenDto(String accessToken, String refreshToken) {

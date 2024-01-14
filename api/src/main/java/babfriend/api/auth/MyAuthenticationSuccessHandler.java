@@ -3,6 +3,7 @@ package babfriend.api.auth;
 import babfriend.api.user.dto.UserDto;
 import babfriend.api.user.service.UserService;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,17 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         response.addHeader("Authorization", "Bearer " + accessToken);
-        response.addHeader("Refresh", refreshToken);
+        // response.addCookie(createCookie("Refresh", refreshToken));
+
         response.sendRedirect(redirectUrl);
+    }
+
+    private Cookie createCookie(String cookieName, String cookieValue) {
+        Cookie cookie = new Cookie(cookieName, cookieValue);
+        cookie.setHttpOnly(true);
+        // cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60 * 24 * 7);
+        return cookie;
     }
 }
