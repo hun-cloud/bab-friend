@@ -20,8 +20,9 @@ import java.util.UUID;
 @Service
 public class FileUtils {
 
+    public static final String url = "https://bab-friend-back.store/image/";
     private static final String PROFILE_PICTURE_PATH = "/home/uploadedImage/";
-
+    // 이미지 url : /image/**
     // 이미지 업데이트
     public String updateImage(UserUpdateDto userUpdateDto) {
 

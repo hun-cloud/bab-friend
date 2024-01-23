@@ -1,5 +1,6 @@
 package babfriend.api.board.controller;
 
+import babfriend.api.board.dto.BoardListResponseDto;
 import babfriend.api.board.dto.BoardsSimpleDto;
 import babfriend.api.board.dto.BoardtDto;
 import babfriend.api.board.service.BoardService;
@@ -10,6 +11,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +28,12 @@ public class BoardController {
     private final BoardService boardService;
     private final UserService userService;
 
-    @Operation(summary = "게시글 리스트 API - 미완성")
+    @Operation(summary = "게시글 리스트 API")
     @GetMapping
-    public List<BoardsSimpleDto> boards() {
+    public ResponseDto<BoardListResponseDto>  boards(
+            @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        return null;
+        return ResponseDto.success(boardService.list(pageable));
     }
 
     @Operation(summary = "게시글 작성 API")
@@ -38,5 +43,4 @@ public class BoardController {
         boardService.postBoard(user, boardtDto);
         return ResponseDto.success();
     }
-
 }

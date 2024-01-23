@@ -48,13 +48,14 @@ public class Board extends BaseEntity {
 
     private LocalDateTime eatTime;
     private Integer joinLimit;
+    private Integer currentJoin;
     private boolean fix;
     private Integer priceRange;
     private boolean alcohol;
     private boolean ageGroupLimit;
 
     @Builder
-    private Board(User babManager, CategoryType categoryType, GenderType genderType, String title, String content, String linkUrl, String location, LocalDateTime eatTime, Integer joinLimit, boolean fix, Integer priceRange, boolean alcohol, boolean ageGroupLimit) {
+    private Board(User babManager, CategoryType categoryType, GenderType genderType, String title, String content, String linkUrl, String location, LocalDateTime eatTime, Integer joinLimit, Integer currentJoin, boolean fix, Integer priceRange, boolean alcohol, boolean ageGroupLimit) {
         this.babManager = babManager;
         this.categoryType = categoryType;
         this.genderType = genderType;
@@ -64,6 +65,7 @@ public class Board extends BaseEntity {
         this.location = location;
         this.eatTime = eatTime;
         this.joinLimit = joinLimit;
+        this.currentJoin = currentJoin;
         this.fix = fix;
         this.priceRange = priceRange;
         this.alcohol = alcohol;

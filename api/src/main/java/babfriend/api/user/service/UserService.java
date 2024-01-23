@@ -1,6 +1,7 @@
 package babfriend.api.user.service;
 
 import babfriend.api.auth.TokenProvider;
+import babfriend.api.board.dto.BoardsSimpleDto;
 import babfriend.api.common.ResponseDto;
 import babfriend.api.common.service.FileUtils;
 import babfriend.api.common.service.RandomNicknameService;
@@ -13,9 +14,11 @@ import io.jsonwebtoken.Claims;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional(readOnly = true)

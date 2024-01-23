@@ -97,14 +97,12 @@ public class AuthController {
 
     private ResponseCookie createCookie(String cookieName, String cookieValue) {
         ResponseCookie cookie = ResponseCookie.from(cookieName, cookieValue)
-                .domain("localhost")
                 .maxAge(60 * 60 * 24 * 7)
                 .path("/")
                 .httpOnly(true)
-                // .secure(true)
-                // .sameSite("None")
+                .secure(true)
+                .sameSite("None")
                 .build();
         return cookie;
     }
-
 }

@@ -26,9 +26,10 @@ public class BoardtDto {
     private boolean ageGroupLimit;
     private CategoryType categoryType;
     private GenderType genderType;
+    private int currentJoin;
 
     @Builder
-    private BoardtDto(String title, String content, String linkUrl, LocalDateTime eatTime, int joinLimit, boolean fix, String location, int priceRange, boolean alcohol, boolean ageGroupLimit, CategoryType categoryType, GenderType genderType) {
+    private BoardtDto(String title, String content, String linkUrl, LocalDateTime eatTime, int joinLimit, boolean fix, String location, int priceRange, boolean alcohol, boolean ageGroupLimit, CategoryType categoryType, GenderType genderType, int currentJoin) {
         this.title = title;
         this.content = content;
         this.linkUrl = linkUrl;
@@ -41,6 +42,7 @@ public class BoardtDto {
         this.ageGroupLimit = ageGroupLimit;
         this.categoryType = categoryType;
         this.genderType = genderType;
+        this.currentJoin = currentJoin;
     }
 
     public Board toEntity(User user) {
@@ -59,6 +61,7 @@ public class BoardtDto {
                 .alcohol(alcohol)
                 .ageGroupLimit(ageGroupLimit)
                 .categoryType(categoryType)
+                .currentJoin(currentJoin == 0 ? 1 : currentJoin)
                 .build();
     }
 }
