@@ -1,6 +1,7 @@
 package babfriend.api.board.controller;
 
 import babfriend.api.board.dto.BoardListResponseDto;
+import babfriend.api.board.dto.BoardResponseDto;
 import babfriend.api.board.dto.BoardsSimpleDto;
 import babfriend.api.board.dto.BoardtDto;
 import babfriend.api.board.service.BoardService;
@@ -30,7 +31,7 @@ public class BoardController {
 
     @Operation(summary = "게시글 리스트 API")
     @GetMapping
-    public ResponseDto<BoardListResponseDto>  boards(
+    public ResponseDto<BoardListResponseDto> boards(
             @PageableDefault(size = 8, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         return ResponseDto.success(boardService.list(pageable));
@@ -43,4 +44,13 @@ public class BoardController {
         boardService.postBoard(user, boardtDto);
         return ResponseDto.success();
     }
+
+    @Operation(summary = "게시글 상세 API")
+    @GetMapping("/{boardId}")
+    public ResponseDto<BoardResponseDto> boardDetail(@PathVariable("boardId") Long boardId) {
+
+        return ResponseDto.success(boardService.findById(boardId));
+    }
+
+
 }

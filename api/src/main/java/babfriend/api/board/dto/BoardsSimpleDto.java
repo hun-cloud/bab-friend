@@ -7,6 +7,8 @@ import babfriend.api.user.type.GenderType;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class BoardsSimpleDto {
 
@@ -17,6 +19,7 @@ public class BoardsSimpleDto {
     private String writer;
     private String shortendLocation;
     private CategoryType categoryType;
+    private LocalDateTime eatTime;
     private boolean alcohol;
     private int currentJoin;
     private int joinLimit;
@@ -25,9 +28,10 @@ public class BoardsSimpleDto {
     private int down;
     private GenderType genderType;
     private boolean fix;
+    private LocalDateTime lastModifiedAt;
 
     @Builder
-    private BoardsSimpleDto(Long id, String title, String content, String writerImageUrl, String writer, String shortendLocation, CategoryType categoryType, boolean alcohol, int currentJoin, int joinLimit, boolean ageGroupLimit, int up, int down, GenderType genderType, boolean fix) {
+    private BoardsSimpleDto(Long id, String title, String content, String writerImageUrl, String writer, String shortendLocation, CategoryType categoryType, LocalDateTime eatTime, boolean alcohol, int currentJoin, int joinLimit, boolean ageGroupLimit, int up, int down, GenderType genderType, boolean fix, LocalDateTime lastModifiedAt) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -35,6 +39,7 @@ public class BoardsSimpleDto {
         this.writer = writer;
         this.shortendLocation = shortendLocation;
         this.categoryType = categoryType;
+        this.eatTime = eatTime;
         this.alcohol = alcohol;
         this.currentJoin = currentJoin;
         this.joinLimit = joinLimit;
@@ -43,6 +48,7 @@ public class BoardsSimpleDto {
         this.down = down;
         this.genderType = genderType;
         this.fix = fix;
+        this.lastModifiedAt = lastModifiedAt;
     }
 
     public static BoardsSimpleDto of(Board board) {
@@ -61,7 +67,9 @@ public class BoardsSimpleDto {
                 .up(board.isAgeGroupLimit() ? board.getBabManager().getBirthYear() - 4 : null)
                 .down(board.isAgeGroupLimit() ? board.getBabManager().getBirthYear() + 4 : null)
                 .genderType(board.getGenderType())
+                .eatTime(board.getEatTime())
                 .fix(board.isFix())
+                .lastModifiedAt(board.getLastModifiedAt())
                 .build();
     }
 }

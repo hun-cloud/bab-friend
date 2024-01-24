@@ -1,6 +1,7 @@
 package babfriend.api.board.service;
 
 import babfriend.api.board.dto.BoardListResponseDto;
+import babfriend.api.board.dto.BoardResponseDto;
 import babfriend.api.board.dto.BoardsSimpleDto;
 import babfriend.api.board.dto.BoardtDto;
 import babfriend.api.board.entity.Board;
@@ -42,5 +43,12 @@ public class BoardService {
                 .empty(boardsAll.isEmpty())
                 .totalElement(boardsAll.getTotalElements())
                 .build();
+    }
+
+    public BoardResponseDto findById(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+
+        return BoardResponseDto.of(board);
     }
 }
