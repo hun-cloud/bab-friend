@@ -1,24 +1,25 @@
 package babfriend.api.common.service;
 
 import babfriend.api.user.dto.UserUpdateDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class FileUtils {
+
+    private final ImageService imageService;
 
     public static final String url = "https://bab-friend-back.store/image/";
     private static final String PROFILE_PICTURE_PATH = "/home/uploadedImage/";
@@ -36,7 +37,14 @@ public class FileUtils {
             Path path = Paths.get(PROFILE_PICTURE_PATH + storedFileName).toAbsolutePath();
 
             try {
-                profileImage.transferTo(path);
+                // profileImage.transferTo(path);
+                BufferedImage bi = ImageIO.read(profileImage.getInputStream());
+                // 이미지 사이즈 변경
+                bi = imageService.resizeImage(bi, 100, 100);
+
+                // 이미지 저장
+                ImageIO.write(bi, "jpg", path.toFile());
+
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());

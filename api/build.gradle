@@ -55,6 +55,9 @@ dependencies {
 
 	// implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+	// 파일 리사이즈
+	implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
 }
 
 tasks.named('test') {
