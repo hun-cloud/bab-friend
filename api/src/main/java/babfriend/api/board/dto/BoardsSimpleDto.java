@@ -6,6 +6,7 @@ import babfriend.api.common.service.FileUtils;
 import babfriend.api.user.type.GenderType;
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.kafka.common.metrics.internals.IntGaugeSuite;
 
 import java.time.LocalDateTime;
 
@@ -17,27 +18,27 @@ public class BoardsSimpleDto {
     private String content;
     private String writerImageUrl;
     private String writer;
-    private String shortendLocation;
+    private String location;
     private CategoryType categoryType;
     private LocalDateTime eatTime;
     private boolean alcohol;
     private int currentJoin;
     private int joinLimit;
     private boolean ageGroupLimit;
-    private int up;
-    private int down;
+    private Integer up;
+    private Integer down;
     private GenderType genderType;
     private boolean fix;
     private LocalDateTime lastModifiedAt;
 
     @Builder
-    private BoardsSimpleDto(Long id, String title, String content, String writerImageUrl, String writer, String shortendLocation, CategoryType categoryType, LocalDateTime eatTime, boolean alcohol, int currentJoin, int joinLimit, boolean ageGroupLimit, int up, int down, GenderType genderType, boolean fix, LocalDateTime lastModifiedAt) {
+    private BoardsSimpleDto(Long id, String title, String content, String writerImageUrl, String writer, String location, CategoryType categoryType, LocalDateTime eatTime, boolean alcohol, int currentJoin, int joinLimit, boolean ageGroupLimit, int up, int down, GenderType genderType, boolean fix, LocalDateTime lastModifiedAt) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.writerImageUrl = writerImageUrl;
         this.writer = writer;
-        this.shortendLocation = shortendLocation;
+        this.location = location;
         this.categoryType = categoryType;
         this.eatTime = eatTime;
         this.alcohol = alcohol;
@@ -52,20 +53,21 @@ public class BoardsSimpleDto {
     }
 
     public static BoardsSimpleDto of(Board board) {
+
         return BoardsSimpleDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .writerImageUrl(FileUtils.url + board.getBabManager().getProfileImageUrl())
                 .writer(board.getBabManager().getNickName())
-                .shortendLocation(board.getLocation())
+                .location(board.getLocation())
                 .categoryType(board.getCategoryType())
                 .alcohol(board.isAlcohol())
                 .currentJoin(board.getCurrentJoin())
                 .joinLimit(board.getJoinLimit())
                 .ageGroupLimit(board.isAgeGroupLimit())
-                .up(board.isAgeGroupLimit() ? board.getBabManager().getBirthYear() - 4 : null)
-                .down(board.isAgeGroupLimit() ? board.getBabManager().getBirthYear() + 4 : null)
+                .up(board.isAgeGroupLimit() ? board.getBabManager().getBirthYear() - 4 : 0)
+                .down(board.isAgeGroupLimit() ? board.getBabManager().getBirthYear() + 4 : 0)
                 .genderType(board.getGenderType())
                 .eatTime(board.getEatTime())
                 .fix(board.isFix())

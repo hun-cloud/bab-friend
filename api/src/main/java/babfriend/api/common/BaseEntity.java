@@ -1,5 +1,6 @@
 package babfriend.api.common;
 
+import babfriend.api.board.dto.BoardUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -21,4 +22,7 @@ public abstract class BaseEntity {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
+
+
+
 }

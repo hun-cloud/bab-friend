@@ -3,6 +3,7 @@ package babfriend.api.common.config;
 import babfriend.api.common.ResponseDto;
 import babfriend.api.common.StatusCode;
 import babfriend.api.common.exception.CustomException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +44,16 @@ public class GlobalControllerErrorAdvice {
                 .build();
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseDto entityNotFoundException(Exception e) {
+        e.printStackTrace();
+
+        return ResponseDto.builder()
+                .statusCode(StatusCode.NOT_FOUND)
+                .responseMessage(e.getMessage())
+                .build();
+    }
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseDto exception(Exception e) {

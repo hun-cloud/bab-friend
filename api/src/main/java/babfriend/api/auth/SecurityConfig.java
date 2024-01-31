@@ -60,7 +60,7 @@ public class SecurityConfig {
                                             "/favicon.ico",
                                             "/doc.html",
                                             "/error",
-                                            "/boards",
+                                            "/boards/**",
                                             "swagger-ui.html").permitAll()
                                     .anyRequest().authenticated();
                         }

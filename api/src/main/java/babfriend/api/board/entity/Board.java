@@ -1,6 +1,7 @@
 package babfriend.api.board.entity;
 
 
+import babfriend.api.board.dto.BoardUpdateDto;
 import babfriend.api.board.type.CategoryType;
 import babfriend.api.common.BaseEntity;
 import babfriend.api.user.entity.User;
@@ -70,5 +71,23 @@ public class Board extends BaseEntity {
         this.priceRange = priceRange;
         this.alcohol = alcohol;
         this.ageGroupLimit = ageGroupLimit;
+    }
+
+    public void update(BoardUpdateDto boardUpdateDto) {
+        title = boardUpdateDto.getTitle();
+        content = boardUpdateDto.getContent();
+        location = boardUpdateDto.getLocation();
+        categoryType = boardUpdateDto.getCategoryType();
+        eatTime = boardUpdateDto.getEatTime();
+        alcohol = boardUpdateDto.isAlcohol();
+        joinLimit = boardUpdateDto.getJoinLimit();
+        ageGroupLimit = boardUpdateDto.isAgeGroupLimit();
+        genderType = boardUpdateDto.getGenderType();
+        linkUrl = boardUpdateDto.getLinkUrl();
+        priceRange = boardUpdateDto.getPriceRange();
+    }
+
+    public void updateFix() {
+        fix = !fix;
     }
 }

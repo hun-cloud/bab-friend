@@ -1,11 +1,9 @@
 package babfriend.api.board.controller;
 
-import babfriend.api.board.dto.BoardListResponseDto;
-import babfriend.api.board.dto.BoardResponseDto;
-import babfriend.api.board.dto.BoardsSimpleDto;
-import babfriend.api.board.dto.BoardtDto;
+import babfriend.api.board.dto.*;
 import babfriend.api.board.service.BoardService;
 import babfriend.api.common.ResponseDto;
+import babfriend.api.common.exception.CredentialsException;
 import babfriend.api.user.entity.User;
 import babfriend.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,9 +46,58 @@ public class BoardController {
     @Operation(summary = "게시글 상세 API")
     @GetMapping("/{boardId}")
     public ResponseDto<BoardResponseDto> boardDetail(@PathVariable("boardId") Long boardId) {
+        BoardResponseDto board = boardService.findById(boardId);
 
-        return ResponseDto.success(boardService.findById(boardId));
+        return ResponseDto.success(board);
     }
 
+    @Operation(summary = "게시글 수정 API")
+    @PatchMapping("/{boardId}")
+    public ResponseDto boardUpdate(@PathVariable("boardId") Long boardId,
+                                   @RequestBody BoardUpdateDto boardUpdateDto,
+                                   HttpServletRequest request) {
+
+        User user = userService.findUser(request);
+        BoardResponseDto board = boardService.findById(boardId);
+
+        if (!board.getWriterEmail().equals(user.getEmail())) {
+            throw new CredentialsException();
+        }
+
+        boardService.update(boardId, boardUpdateDto);
+
+
+        return ResponseDto.success();
+    }
+
+    @Operation(summary = "게시글 삭제 API")
+    @DeleteMapping("/{boardId}")
+    public ResponseDto boardDetail(@PathVariable("boardId") Long boardId, HttpServletRequest request) {
+        User user = userService.findUser(request);
+        BoardResponseDto board = boardService.findById(boardId);
+
+        if (!board.getWriterEmail().equals(user.getEmail())) {
+            throw new CredentialsException();
+        }
+
+        boardService.deleteById(boardId);
+
+        return ResponseDto.success();
+    }
+
+    @Operation(summary = "게시글 fix API (약속 결정) 토글")
+    @PostMapping("/{boardId}/fix")
+    public ResponseDto boardFix(@PathVariable("boardId") Long boardId, HttpServletRequest request) {
+        User user = userService.findUser(request);
+        BoardResponseDto board = boardService.findById(boardId);
+
+        if (!board.getWriterEmail().equals(user.getEmail())) {
+            throw new CredentialsException();
+        }
+
+        boardService.updateFix(board.getId());
+
+        return ResponseDto.success();
+    }
 
 }
