@@ -4,6 +4,7 @@ package babfriend.api.board.entity;
 import babfriend.api.common.BaseEntity;
 import babfriend.api.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,9 @@ public class BobMeeting extends BaseEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @Builder
+    private BobMeeting(User joinUser, Board board) {
+        this.joinUser = joinUser;
+        this.board = board;
+    }
 }

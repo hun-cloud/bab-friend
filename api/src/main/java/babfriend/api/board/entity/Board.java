@@ -34,7 +34,7 @@ public class Board extends BaseEntity {
     private User babManager;
 
     @OneToMany(mappedBy = "board")
-    private List<BobMeeting> bobMeetings = new ArrayList<>();
+    private List<BobMeeting> babMeetings = new ArrayList<>();
 
     @Enumerated(STRING)
     private CategoryType categoryType;
@@ -54,6 +54,9 @@ public class Board extends BaseEntity {
     private Integer priceRange;
     private boolean alcohol;
     private boolean ageGroupLimit;
+
+    @OneToMany(mappedBy = "board")
+    private List<BoardComment> boardComments = new ArrayList<>();
 
     @Builder
     private Board(User babManager, CategoryType categoryType, GenderType genderType, String title, String content, String linkUrl, String location, LocalDateTime eatTime, Integer joinLimit, Integer currentJoin, boolean fix, Integer priceRange, boolean alcohol, boolean ageGroupLimit) {
@@ -90,4 +93,13 @@ public class Board extends BaseEntity {
     public void updateFix() {
         fix = !fix;
     }
+
+    public void joinOut() {
+        currentJoin -= 1;
+    }
+
+    public void joinIn() {
+        currentJoin += 1;
+    }
+
 }

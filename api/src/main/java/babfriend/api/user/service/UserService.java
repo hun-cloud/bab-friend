@@ -62,6 +62,13 @@ public class UserService {
         return findUser;
     }
 
+    public User loginUserCheck(HttpServletRequest request) {
+        String email = getEmail(request);
+
+        return null;
+
+    }
+
     public UserDetailDto userDetailInfo(HttpServletRequest request) {
         String email = getEmail(request);
 

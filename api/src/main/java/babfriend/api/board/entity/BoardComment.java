@@ -4,6 +4,7 @@ package babfriend.api.board.entity;
 import babfriend.api.common.BaseEntity;
 import babfriend.api.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,11 @@ public class BoardComment extends BaseEntity {
     private User user;
 
     private String content;
+
+    @Builder
+    private BoardComment(Board board, User user, String content) {
+        this.board = board;
+        this.user = user;
+        this.content = content;
+    }
 }

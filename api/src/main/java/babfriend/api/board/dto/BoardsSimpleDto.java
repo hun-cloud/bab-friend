@@ -1,14 +1,21 @@
 package babfriend.api.board.dto;
 
 import babfriend.api.board.entity.Board;
+import babfriend.api.board.entity.BobMeeting;
+import babfriend.api.board.entity.QBoard;
+import babfriend.api.board.entity.QBobMeeting;
 import babfriend.api.board.type.CategoryType;
 import babfriend.api.common.service.FileUtils;
 import babfriend.api.user.type.GenderType;
+import com.querydsl.core.Tuple;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.kafka.common.metrics.internals.IntGaugeSuite;
 
 import java.time.LocalDateTime;
+
+import static babfriend.api.board.entity.QBoard.board;
+import static babfriend.api.board.entity.QBobMeeting.bobMeeting;
 
 @Getter
 public class BoardsSimpleDto {
@@ -54,11 +61,48 @@ public class BoardsSimpleDto {
 
     public static BoardsSimpleDto of(Board board) {
 
+        String profileImageUrl = board.getBabManager().getProfileImageUrl();
+
+        if (profileImageUrl != null && !profileImageUrl.startsWith("http")) {
+            profileImageUrl = FileUtils.url + "/image/" + profileImageUrl;
+        }
+
         return BoardsSimpleDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
-                .writerImageUrl(FileUtils.url + board.getBabManager().getProfileImageUrl())
+                .writerImageUrl(profileImageUrl)
+                .writer(board.getBabManager().getNickName())
+                .location(board.getLocation())
+                .categoryType(board.getCategoryType())
+                .alcohol(board.isAlcohol())
+                .currentJoin(board.getCurrentJoin())
+                .joinLimit(board.getJoinLimit())
+                .ageGroupLimit(board.isAgeGroupLimit())
+                .up(board.isAgeGroupLimit() ? board.getBabManager().getBirthYear() - 4 : 0)
+                .down(board.isAgeGroupLimit() ? board.getBabManager().getBirthYear() + 4 : 0)
+                .genderType(board.getGenderType())
+                .eatTime(board.getEatTime())
+                .fix(board.isFix())
+                .lastModifiedAt(board.getLastModifiedAt())
+                .build();
+    }
+
+    public static BoardsSimpleDto of(Tuple tuple) {
+
+        Board board = tuple.get(QBoard.board);
+
+        String profileImageUrl = board.getBabManager().getProfileImageUrl();
+
+        if (profileImageUrl != null && !profileImageUrl.startsWith("http")) {
+            profileImageUrl = FileUtils.url + "/image/" + profileImageUrl;
+        }
+
+        return BoardsSimpleDto.builder()
+                .id(board.getId())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .writerImageUrl(profileImageUrl)
                 .writer(board.getBabManager().getNickName())
                 .location(board.getLocation())
                 .categoryType(board.getCategoryType())

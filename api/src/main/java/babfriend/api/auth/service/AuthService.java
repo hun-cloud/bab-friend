@@ -76,8 +76,9 @@ public class AuthService {
         return true;
     }
 
-    public KakaoLoginResponseDto getKakaoToken(String code) {
+    public KakaoLoginResponseDto getKakaoToken(String code, String redirectDomain) {
         try {
+            redirectDomain += "/kakao/callback";
             log.info("code" + code);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8");
@@ -87,7 +88,7 @@ public class AuthService {
             body.add("grant_type", "authorization_code");
             body.add("client_id", KAKAO_REST_API_KEY);
             body.add("client_secret", KAKAO_CLIENT_SECRET);
-            body.add("redirect_uri", REDIRECT_URL);
+            body.add("redirect_uri", redirectDomain);
             body.add("code", code);
 
             RestTemplate restTemplate = new RestTemplate();

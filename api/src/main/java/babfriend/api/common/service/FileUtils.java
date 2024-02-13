@@ -29,7 +29,12 @@ public class FileUtils {
 
         MultipartFile profileImage = userUpdateDto.getProfileImageUrl();
 
-        if(!profileImage.isEmpty()) {
+        if (profileImage != null) {
+            log.info("프로필이미지 파일명");
+            log.info(profileImage.getOriginalFilename());
+        }
+
+        if(profileImage != null && !profileImage.isEmpty()) {
             String originalFileName = profileImage.getOriginalFilename();
             String originalFIleExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
             String storedFileName = UUID.randomUUID() + originalFIleExtension;
@@ -49,7 +54,7 @@ public class FileUtils {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
             }
-
+            log.info("저장된 파일명 : {}", storedFileName);
             return storedFileName;
         }
         return null;

@@ -2,6 +2,7 @@ package babfriend.api.user.entity;
 
 import babfriend.api.board.entity.Board;
 import babfriend.api.board.entity.BoardComment;
+import babfriend.api.board.entity.BobMeeting;
 import babfriend.api.common.BaseEntity;
 import babfriend.api.notification.entity.Notification;
 import babfriend.api.review.entity.EatReview;
@@ -63,6 +64,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "reviewer")
     private List<EatReview> sendReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "joinUser")
+    private List<BobMeeting> babMeetings = new ArrayList<>();
 
     @Builder
     private User(String email, String name, String nickName, GenderType genderType, int birthYear, String profileImageUrl) {

@@ -71,7 +71,7 @@ public class UserDto {
         String profileImageUrl = user.getProfileImageUrl();
 
         if (profileImageUrl != null && !profileImageUrl.startsWith("http")) {
-            profileImageUrl = "/image/" + profileImageUrl;
+            profileImageUrl = FileUtils.url + "/image/" + profileImageUrl;
         }
 
         return UserDto.builder()
@@ -81,7 +81,7 @@ public class UserDto {
                 .genderType(user.getGenderType())
                 .birthYear(user.getBirthYear())
                 .temperature(user.getTemperature())
-                .profileImageUrl(FileUtils.url + profileImageUrl)
+                .profileImageUrl(profileImageUrl)
                 .build();
     }
 

@@ -20,9 +20,9 @@ public class CustomLogoutHandler implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
-        String refreshToken = tokenProvider.resolveRefreshToken(request);
+        // String refreshToken = tokenProvider.resolveRefreshToken(request);
         String accessToken = tokenProvider.resolveAccessToken(request);
-        authService.logout(refreshToken, accessToken);
+        // authService.logout(accessToken);
         authService.addBlackList(accessToken);
     }
 }

@@ -1,9 +1,14 @@
 package babfriend.api.user.controller;
 
 import babfriend.api.auth.dto.TokenDto;
+import babfriend.api.board.dto.BoardJoinMeetingDto;
+import babfriend.api.board.dto.BoardsSimpleDto;
+import babfriend.api.board.service.BoardService;
 import babfriend.api.common.ResponseDto;
 import babfriend.api.user.dto.UserDto;
+import babfriend.api.user.dto.UserMeetingDto;
 import babfriend.api.user.dto.UserUpdateDto;
+import babfriend.api.user.entity.User;
 import babfriend.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +19,8 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "사용자 정보 API", description = "사용자 관련 API")
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -21,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final BoardService boardService;
 
     @Operation(summary = "유저정보 API")
     @GetMapping("/info")
@@ -45,5 +53,13 @@ public class UserController {
         userService.updateInfo(request, userUpdateDto);
 
         return ResponseDto.success();
+    }
+
+    @Operation(summary = "내가 참여한 식사 리스트 API - 미완성")
+    @GetMapping("/meetings")
+    public ResponseDto<List<BoardsSimpleDto>> userMeetingList(HttpServletRequest request) {
+        User user = userService.findUser(request);
+
+        return ResponseDto.success(boardService.getJoinMeeting(user));
     }
 }
