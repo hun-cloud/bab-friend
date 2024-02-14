@@ -94,5 +94,6 @@ public class BoardResponseDto {
                 .changed(!board.getCreatedAt().isEqual(board.getLastModifiedAt()))
                 .boardComments(BoardCommentResponseDto.ofList(board.getBoardComments()))
                 .build();
+
     }
 }
